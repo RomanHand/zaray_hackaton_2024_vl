@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.group:hover .group-hover\:text-blue-800 {
+  color: #2b6cb0;
+}
