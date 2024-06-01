@@ -1,0 +1,19 @@
+[
+  {
+    "url": "temp/video.mp4",
+    "violations": [
+      {
+        "preview": "123.jpeg",
+        "timestamp": "00:12:36:789"
+      },
+      {
+        "preview": "111.jpeg",
+        "timestamp": "00:12:38:789"
+      },
+      {
+        "preview": "211.jpeg",
+        "timestamp": "00:12:38:789"
+      }
+    ]
+  }
+]
