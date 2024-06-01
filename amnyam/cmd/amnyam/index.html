@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>File upload</title>
+  </head>
+  <body>
+    <form
+      id="form"
+      enctype="multipart/form-data"
+      action="/upload"
+      method="POST"
+    >
+      <input class="input file-input" type="file" name="file" multiple />
+      <button class="button" type="submit">Загрузить</button>
+      После нажатия на кнопку "Загрузить" необходимо дождаться ответа от сервера
+    </form>
+  </body>
+</html>

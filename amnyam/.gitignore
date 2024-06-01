@@ -1,0 +1,16 @@
+*.test
+test/*
+.ide/*
+.idea/*
+*.exe
+*.log
+*.txt
+*.test.go
+build/
+*.old
+*.json
+*.mp4
+fragments/
+origins/
+previews/
+*.pt
