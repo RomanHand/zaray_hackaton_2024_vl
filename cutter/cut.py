@@ -5,6 +5,8 @@ import ffmpeg
 parser = argparse.ArgumentParser(description='Резак видосов по timestamp')
 parser.add_argument('-f', '--file', type=str, help='Путь до исходного видео')
 parser.add_argument('-t', '--timestamps', type=str, help='Массив временных отрезков в формате "[[начало_1, конец_1], [начало_2, конец_2] ...]"')
+parser.add_argument('-o', '--output', type=str, help='Путь для нарезанных видео', default='')
+
 args = parser.parse_args()
 
 if args.file is None or args.timestamps is None:
@@ -13,11 +15,13 @@ if args.file is None or args.timestamps is None:
 
 video_path = args.file
 timestamps = eval(args.timestamps)
+output_path = args.output
 
 for idx, timestamp in enumerate(timestamps):
     start_time = timestamp[0]
     end_time = timestamp[1]
-    output_file = f'video_clip_{idx+1}.mp4'
+    
+    output_file = f'{output_path}video_clip_{idx+1}.mp4'
 
     stream = ffmpeg.input(video_path, ss=start_time, to=end_time)
     stream = ffmpeg.output(stream, output_file)
