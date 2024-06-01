@@ -1,0 +1,1 @@
+pyinstaller cut.py --onefile --clean
