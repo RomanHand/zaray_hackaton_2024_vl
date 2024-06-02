@@ -2,3 +2,6 @@
 /cutter/build
 /cutter/cut.spec
 /front/node_modules/
+/detector/build
+/detector/dist
+detector/detector.spec
