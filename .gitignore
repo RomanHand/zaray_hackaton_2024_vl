@@ -1,3 +1,4 @@
 /cutter/dist
 /cutter/build
 /cutter/cut.spec
+/front/node_modules/
