@@ -97,6 +97,7 @@ func (e *Engine) uploadHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer dst.Close()
 
+	e.log.Info(fmt.Sprint("Загрузка файла..."))
 	_, err = io.Copy(dst, file)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -116,7 +117,7 @@ func (e *Engine) uploadHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	e.log.Info(fmt.Sprintf("Received file: %s, frames: %v", originFileName, string(outputDetector)))
+	e.log.Info(fmt.Sprintf("Полученный файл: %s, frames: %v", originFileName, string(outputDetector)))
 
 	//
 	// Парсинг файла с отрезками нарушений
@@ -142,6 +143,13 @@ func (e *Engine) uploadHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if len(recordFragments.Violations) == 0 {
+		respondWithJSON(w, ResponseViolations{
+			Violations: []ResponseViolation{},
+		})
+		return
+	}
+
 	fragmentsDir := fmt.Sprintf("%s/fragments", strings.Replace(e.workDir, "\\", "/", -1))
 	fragmentsFileDir := fmt.Sprintf("%s/%s", fragmentsDir, originFileName)
 	// Каталог для нарезанных отрезков с нарушениями
@@ -152,6 +160,7 @@ func (e *Engine) uploadHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	e.log.Info(fmt.Sprint("Подготовка фаргментов с нарушениями..."))
 	//
 	// Нарезка видео записи на фрагменты с нарушениями
 	files, err := e.Cutter(recordPath, recordFragments.Violations, fragmentsFileDir)
@@ -161,6 +170,7 @@ func (e *Engine) uploadHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	e.log.Info(fmt.Sprint("Отправка ответа..."))
 	// Возврат массива с нарушениями
 	respViolations := &ResponseViolations{}
 	for i, p := range files {
