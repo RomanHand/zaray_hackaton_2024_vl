@@ -5,7 +5,6 @@ import json
 from ultralytics import YOLO
 from math import floor
 from functools import reduce
-#import time
 import torch
 
 
@@ -29,7 +28,7 @@ class Config:
 
 
 def glue_last_intervals(intervals: list):
-    intervals[-2][1] = intervals[-1][1]
+    intervals[-2][1] = intervals[-1][0]
     intervals.remove(intervals[-1])
 
 
@@ -40,6 +39,10 @@ def write_previews(video_name, cap, fps, intervals):
         _, frame = cap.read()
         out_path = f"previews/{video_name}_{i}.png"
         cv2.imwrite(out_path, frame)
+
+
+def format_seconds(seconds):
+    return f"{floor(seconds) // 60:02}:{floor(seconds) % 60:02}"
 
 
 def process_file(video_name, path_source, model, config: Config):
@@ -83,6 +86,9 @@ def process_file(video_name, path_source, model, config: Config):
     if len(intervals) > 1 and len(intervals[-1]) == 1:
         intervals[-1].append(frame_count / fps)
 
+    for i in range(len(intervals)):
+        intervals[i] = list(map(format_seconds, intervals[i]))
+
     write_previews(video_name, cap, fps, intervals)
     cap.release()
 
@@ -114,13 +120,10 @@ def main(video_name, path_source, model_path, config_args=None):
         config = Config(*config)
 
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    #print('Using device:', device)
     model = YOLO(model_path).to(device)
 
-    #start_time = time.time()
     intervals = process_file(video_name, path_source, model, config)
     write_json(intervals, video_name, path_source)
-    #print(f'Spend time: {time.time() - start_time}')
 
 
 if __name__ == '__main__':
